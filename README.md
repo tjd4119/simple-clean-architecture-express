@@ -10,24 +10,24 @@ This project is a simple example of a clean architecture implementation in a Nod
 │   ├── config                      \- Configuration files.
 │   ├── domain
 │   │   ├── entities                \- Domain entities (e.g., User, Invitation, Group, Member).
-│   │   ├── errors                 \- Domain errors (e.g., InvalidEmailError, UserNotFoundError).
-│   │   ├── repositories        \- Repository interfaces to be implemented in the infrastructure layer.
-│   │   └── usecases             \- Business logic implementations (e.g., AcceptInvitationUseCase).
+│   │   ├── errors                  \- Domain errors (e.g., InvalidEmailError, UserNotFoundError).
+│   │   ├── repositories            \- Repository interfaces to be implemented in the infrastructure layer.
+│   │   └── usecases                \- Business logic implementations (e.g., AcceptInvitationUseCase).
 │   ├── infrastructure
 │   │   ├── database                \- Database connection and setup.
 │   │   └── repositories            \- repository implementations.
 │   ├── interfaces
-│   │   ├── controllers         \- Express controllers.
-│   │   ├── routes                \- Express routes.
+│   │   ├── controllers             \- Express controllers.
+│   │   ├── routes                  \- Express routes.
 │   │   └── dto                     \- Data transfer objects (e.g., UserDto, InvitationDto).
-│   └── utils                      \- Utility functions.
+│   └── utils                       \- Utility functions.
 ├── tests
 │   └── integration
-│        ├── features                \- Gherkin feature files for scenarios.
-│        └── *.steps.ts              \- Step definitions and test cases.
-├── apispec.yaml                  \- OpenAPI specification.
-├── .env.test                         \- Environment variables for testing.
-├── package.json                 \- Project metadata and dependencies.
+│        ├── features               \- Gherkin feature files for scenarios.
+│        └── *.steps.ts             \- Step definitions and test cases.
+├── apispec.yaml                    \- OpenAPI specification.
+├── .env.test                       \- Environment variables for testing.
+├── package.json                    \- Project metadata and dependencies.
 └── README.md                   
 ```
 
