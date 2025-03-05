@@ -16,5 +16,6 @@ export class Migration1741150356042 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE "supports"."sales_inquiry"`);
     await queryRunner.query(`DROP TYPE "supports"."sales_inquiry_status_enum"`);
+    await queryRunner.query(`DROP SCHEMA "supports"`);
   }
 }
