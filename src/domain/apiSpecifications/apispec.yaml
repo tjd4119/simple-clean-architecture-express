@@ -1,0 +1,503 @@
+openapi: 3.1.0
+info:
+  title: SarcoCloud
+  description: ''
+  version: 1.0.0
+tags: []
+paths:
+  /public/v1/test-public-only:
+    get:
+      summary: publicOnly
+      deprecated: false
+      description: Public API 테스트
+      operationId: publicOnly
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-eov-operation-handler: StatusController
+  /public/v1/ping:
+    get:
+      summary: ping
+      deprecated: false
+      description: API 서버 시간 조회
+      operationId: ping
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: Return server time in UTC formatted as ISO8601
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  time:
+                    type: string
+                    title: ISO8601 format datetime
+                    description: server time in UTC
+                    format: date-time
+                description: ping response
+                required:
+                  - time
+              examples:
+                '1':
+                  summary: Success
+                  value:
+                    time: '2025-01-07T15:45:58.563Z'
+          headers: {}
+      security: []
+      x-eov-operation-handler: StatusController
+  /public/v1/health-check:
+    get:
+      summary: healthCheck
+      deprecated: false
+      description: API 서버 상태 확인
+      operationId: healthCheck
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    title: Server health status scan result
+                    description: fixed to "online"
+                required:
+                  - status
+              examples:
+                '1':
+                  summary: Success
+                  value:
+                    status: online
+          headers: {}
+      security: []
+      x-eov-operation-handler: StatusController
+  /internal/v1/supports/sales-inquiries:
+    post:
+      summary: createSalesInquiry
+      deprecated: false
+      description: 도입문의 생성
+      operationId: createSalesInquiry
+      tags: []
+      parameters:
+        - name: Content-Type
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                organizationName:
+                  type: string
+                  description: 기관명
+                  minLength: 1
+                  maxLength: 45
+                contactName:
+                  type: string
+                  description: 담당자 이름
+                  maxLength: 45
+                  minLength: 1
+                contactEmail:
+                  type: string
+                  description: 담당자 이메일
+                  format: email
+                  maxLength: 254
+                  minLength: 1
+                contactPhonenumber:
+                  type: string
+                  description: 핸드폰 번호
+                  maxLength: 45
+                  minLength: 1
+                data:
+                  type: string
+                  description: 도입 문의 데이터
+                  minLength: 1
+                  maxLength: 500
+              required:
+                - organizationName
+                - contactName
+                - contactEmail
+                - contactPhonenumber
+                - data
+            example:
+              organizationName: Crooks - McClure
+              contactName: Trevor_Hirthe58
+              contactEmail: Merle63@yahoo.com
+              contactPhonenumber: '+821012345678'
+              data: Turba teres creator vox amaritudo asperiores sui.
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  salesInquiryId:
+                    type: integer
+                    minimum: 0
+                    description: 도입문의 id
+                  inquiredAt:
+                    type: string
+                    format: date-time
+                    description: 도입문의 시간
+                required:
+                  - salesInquiryId
+                  - inquiredAt
+              examples:
+                '1':
+                  summary: Success
+                  value:
+                    salesInquiryId: 1
+                    inquiredAt: '2025-02-19T20:23:20.967Z'
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidQueryParamsError'
+              examples:
+                '1':
+                  summary: Exception
+                  value:
+                    message: Some query parameters are invalid in the request.
+                    context:
+                      invalidParams:
+                        - foo
+                        - car
+                      details:
+                        - foo is not allowed.
+                        - car is not allowed.
+          headers: {}
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointNotFoundError'
+              examples:
+                '1':
+                  summary: Exception
+                  value:
+                    message: The requested endpoint could not be found.
+                    context:
+                      details: specific reason
+          headers: {}
+        '415':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnsupportedMediaTypeError'
+              examples:
+                '1':
+                  summary: Exception
+                  value:
+                    message: The content-type of request is not supported.
+                    context: 'Requested content-type: ${content-type}'
+          headers: {}
+        x-400:InvalidBodyTypeError:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidBodyTypeError'
+              examples:
+                '1':
+                  summary: Exception
+                  value:
+                    message: The type of request body is invalid.
+          headers: {}
+        x-400:MissingFieldsInBodyError:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingFieldsInBodyError'
+              examples:
+                '1':
+                  summary: Exception
+                  value:
+                    message: Some required fields are missing in the request body.
+                    context:
+                      missingFields:
+                        - organizationName
+                        - contactName
+                        - contactEmail
+                        - contactPhonenumber
+                        - data
+          headers: {}
+        x-400:InvalidFieldsInBodyError:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidFieldsInBodyError'
+              examples:
+                '1':
+                  summary: Exception1
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - organizationName
+                      details:
+                        - organizationName should be a string.
+                '2':
+                  summary: Exception2
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - organizationName
+                      details:
+                        - organizationName exceeds the length limit.
+                '3':
+                  summary: Exception3
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactName
+                      details:
+                        - contactName should be a string.
+                '4':
+                  summary: Exception4
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactName
+                      details:
+                        - contactName exceeds the length limit.
+                '5':
+                  summary: Exception5
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactEmail
+                      details:
+                        - contactEmail should be a string.
+                '6':
+                  summary: Exception6
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactEmail
+                      details:
+                        - contactEmail is not a valid email.
+                '7':
+                  summary: Exception7
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactPhonenumber
+                      details:
+                        - contactPhonenumber should be a string.
+                '8':
+                  summary: Exception8
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - contactPhonenumber
+                      details:
+                        - contactPhonenumber is not a valid phone number.
+                '9':
+                  summary: Exception9
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - data
+                      details:
+                        - data should be a string.
+                '10':
+                  summary: Exception10
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - data
+                      details:
+                        - data exceeds the length limit.
+                '11':
+                  summary: Exception11
+                  value:
+                    message: Some fields are invalid in the request body.
+                    context:
+                      invalidFields:
+                        - organizationName
+                        - contactName
+                        - contactEmail
+                        - contactPhonenumber
+                        - data
+                      details:
+                        - organizationName should be a string.
+                        - contactName exceeds the length limit.
+                        - contactEmail is not a valid email.
+                        - contactPhonenumber is not a valid phone number.
+                        - data exceeds the length limit.
+          headers: {}
+      security: []
+      x-eov-operation-handler: SupportsController
+  /internal/v1/test-internal-only:
+    get:
+      summary: internalOnly
+      deprecated: false
+      description: Internal API 테스트
+      operationId: internalOnly
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-eov-operation-handler: StatusController
+  /back-office/v1/test-back-office-only:
+    get:
+      summary: backOfficeOnly
+      deprecated: false
+      description: Back Office API 테스트
+      operationId: backOfficeOnly
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-eov-operation-handler: StatusController
+components:
+  schemas:
+    InvalidQueryParamsError:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: object
+          properties:
+            invalidParams:
+              type: array
+              items:
+                type: string
+            details:
+              type: array
+              items:
+                type: string
+          required:
+            - invalidParams
+            - details
+      required:
+        - message
+        - context
+    InvalidBodyTypeError:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    MissingFieldsInBodyError:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: object
+          properties:
+            missingFields:
+              type: array
+              items:
+                type: string
+          required:
+            - missingFields
+      required:
+        - message
+        - context
+    InvalidFieldsInBodyError:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: object
+          properties:
+            invalidFields:
+              type: array
+              items:
+                type: string
+            details:
+              type: array
+              items:
+                type: string
+          required:
+            - invalidFields
+            - details
+      required:
+        - message
+        - context
+    EndpointNotFoundError:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: object
+          properties:
+            details:
+              type: string
+          required:
+            - details
+      required:
+        - message
+        - context
+    UnsupportedMediaTypeError:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: string
+      required:
+        - message
+        - context
+  securitySchemes: {}
+servers: []
+security: []

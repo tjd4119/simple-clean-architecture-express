@@ -1,9 +1,10 @@
+import { getDatabasePassword } from '../src/infrastructure/aws/secretManager';
 import { createDataSource } from '../src/infrastructure/database/postgres';
-import dotenvFlow from "dotenv-flow";
+import dotenvFlow from 'dotenv-flow';
 dotenvFlow.config();
 
 async function runMigrations() {
-  const password = process.env.PG_DB_PASSWORD || 'password';
+  const password = await getDatabasePassword();
   const dataSource = createDataSource(password);
   await dataSource.initialize();
 

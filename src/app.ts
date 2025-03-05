@@ -1,16 +1,16 @@
-import "reflect-metadata";
-import dotenvFlow from "dotenv-flow";
-import express, {NextFunction, Request, Response} from "express";
-import morgan from "morgan";
-import logger from "./utils/logger";
-import * as OpenApiValidator from "express-openapi-validator";
-import path from "path";
-import userRoutes from "./interface/routes/userRoutes";
-import invitationRoutes from "./interface/routes/invitationRoutes";
-import {DomainError} from "./domain/errors/DomainError";
-import {createDataSource} from "./infrastructure/database/postgres";
-import {Container} from "typedi";
-import groupRoutes from "./interface/routes/groupRoutes";
+import 'reflect-metadata';
+import dotenvFlow from 'dotenv-flow';
+import express, { NextFunction, Request, Response } from 'express';
+import morgan from 'morgan';
+import logger from './utils/logger';
+import * as OpenApiValidator from 'express-openapi-validator';
+import { createDataSource } from './infrastructure/database/postgres';
+import { Container } from 'typedi';
+import { apiOperationHandlerRootPath } from './interface/controllers/api.operation.handler.root.path';
+import { apiSpecification } from './domain/apiSpecifications/apiSpecification';
+import { getDatabasePassword } from './infrastructure/aws/secretManager';
+import { APIEntityError } from './domain/errors/APIEntityError';
+import { HttpStatusCode } from './domain/apiSpecifications/httpTypes';
 
 dotenvFlow.config();
 
@@ -32,36 +32,46 @@ app.use(morganMiddleware);
 // setup the OpenAPIValidator middleware
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: path.join(__dirname, "../apispec.yaml"),
+    apiSpec: apiSpecification,
     validateRequests: true,
-    validateResponses: true,
+    validateResponses: false,
+    operationHandlers: apiOperationHandlerRootPath,
+    validateSecurity: false,
   })
 );
 
-// setup the routes
-app.use('/users', userRoutes);
-app.use("/invitations", invitationRoutes);
-app.use("/groups", groupRoutes);
-
 // setup error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  logger.error(err);
-  if (err instanceof DomainError) {
-    res.status(err.statusCode).send( err.message);
-    return;
+app.use((e: any, req: Request, res: Response, next: NextFunction) => {
+  logger.error(e);
+  if (e instanceof APIEntityError) {
+    res.status(e.httpStatusCode).json({
+      message: e.message,
+      context: e.context,
+    });
   }
 
-  res.status(err.status || 500).send(err.message);
+  res.status(e.status ?? HttpStatusCode.ServerErrorInternal).json({
+    message: e.type ?? 'The server encountered an unexpected condition',
+  });
 });
 
-// setup database source
-const appDataSource = createDataSource(process.env.PG_DB_PASSWORD || 'password');
-appDataSource.initialize().then(() => {
-  logger.info('Database connected');
-}).catch((err) => {
-  logger.error('Database connection error:', err);
-  process.exit(1);
-});
-Container.set('DataSource', appDataSource);
+async function DatabaseConnect() {
+  const password = await getDatabasePassword();
+  logger.info('Database password retrieved : ' + password);
+  // setup database source
+  const appDataSource = createDataSource(password);
+  await appDataSource
+    .initialize()
+    .then(() => {
+      logger.info('Database connected');
+    })
+    .catch((err) => {
+      logger.error('Database connection error:', err);
+      process.exit(1);
+    });
+  Container.set('DataSource', appDataSource);
+}
+
+DatabaseConnect();
 
 export default app;

@@ -19,6 +19,8 @@
     "build": "npx tsc",
     "start": "node dist/src/index.js",
     "test": "NODE_ENV=test jest -i",
+    "test:unit": "jest --detectOpenHandles --passWithNoTests --selectProjects unit",
+    "test:integration": "jest --detectOpenHandles --runInBand --passWithNoTests --selectProjects integration",
     "debug:local": "NODE_ENV=local nodemon --watch src --ext ts  --exec \"ts-node\" src/index.ts",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate src/infrastructure/database/migrations/migration -d scripts/local.datasource.ts",
     "migration:run:local": "NODE_ENV=local ts-node scripts/runMigration.ts",
@@ -26,6 +28,8 @@
     "migration:run": "ts-node scripts/runMigration.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.758.0",
+    "@testcontainers/postgresql": "^10.18.0",
     "@types/morgan": "^1.9.9",
     "class-transformer": "^0.5.1",
     "dotenv-flow": "^4.1.0",
