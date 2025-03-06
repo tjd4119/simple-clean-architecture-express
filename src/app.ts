@@ -57,7 +57,6 @@ app.use((e: any, req: Request, res: Response, next: NextFunction) => {
 
 async function DatabaseConnect() {
   const password = await getDatabasePassword();
-  logger.info('Database password retrieved : ' + password);
   // setup database source
   const appDataSource = createDataSource(password);
   await appDataSource
