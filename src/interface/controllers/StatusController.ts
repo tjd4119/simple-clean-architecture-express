@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpStatusCode } from '../types/httpTypes';
 import { FatalError } from '../../domain/errors/FatalError';
-import Container from 'typedi';
-import { ScanServerStatusUseCase } from '../../domain/usecases/status/ScanServerStatusUseCase';
-import { GetCurrentUTCDateTimeUseCase } from '../../domain/usecases/status/GetCurrentUTCDateTimeUseCase';
 
 /**
  * [API operation handler]
@@ -25,9 +22,7 @@ export const healthCheck = async (
   next: NextFunction
 ) => {
   try {
-    const useCase = Container.get(ScanServerStatusUseCase);
-    const status = await useCase.execute();
-    res.status(HttpStatusCode.SuccessOK).json(status);
+    res.status(HttpStatusCode.SuccessOK).json({ status: 'online' });
   } catch (e) {
     next(new FatalError(e));
   }
@@ -49,10 +44,9 @@ export const healthCheck = async (
  */
 export const ping = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const useCase = Container.get(GetCurrentUTCDateTimeUseCase);
-    const currentTime = await useCase.execute();
-
-    res.status(HttpStatusCode.SuccessOK).json({ time: currentTime });
+    res
+      .status(HttpStatusCode.SuccessOK)
+      .json({ time: new Date().toISOString() });
   } catch (e) {
     next(new FatalError(e));
   }
