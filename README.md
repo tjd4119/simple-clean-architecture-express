@@ -60,7 +60,7 @@ You can view the API documentation through Swagger UI or other [OpenAPI editor p
 - PostgreSQL (as specified in the environment configuration)
   - I recommend using Docker to run a PostgreSQL instance locally. You can use the following command:
     ```bash
-    docker run -p 5432:5432 --name test-postgres \                                                                              (base) 0 (41.312s) < 22:19:44
+    docker run -p 5432:5432 --name test-postgres \
         -e POSTGRES_PASSWORD=postgres \
         -d postgres:latest
     ``` 

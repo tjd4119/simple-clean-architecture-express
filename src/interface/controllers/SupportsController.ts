@@ -5,6 +5,7 @@ import { FatalError } from '../../domain/errors/FatalError';
 import { CreateSalesInquiryUseCase } from '../../domain/usecases/support/CreateSalesInquiryUseCase';
 import { plainToInstance } from 'class-transformer';
 import { SalesInquiryDTO } from '../dto/SalesInquiryDTO';
+import { InvalidFieldInBodyError } from '../../domain/errors/InvalidFieldInBodyError';
 
 export const createSalesInquiry = async (
   req: Request,
@@ -31,6 +32,9 @@ export const createSalesInquiry = async (
     const salesInquiryDTO = plainToInstance(SalesInquiryDTO, salesInquiry);
     res.status(HttpStatusCode.SuccessCreated).json(salesInquiryDTO);
   } catch (e) {
-    next(new FatalError(e));
+    if (e instanceof InvalidFieldInBodyError) {
+      return next(e);
+    }
+    return next(new FatalError(e));
   }
 };

@@ -45,7 +45,6 @@ app.use((e: any, req: Request, res: Response, next: NextFunction) => {
   logger.error(e);
   if (e instanceof APIEntityError) {
     res.status(e.httpStatusCode).json({
-      message: e.message,
       context: e.context,
     });
   }
