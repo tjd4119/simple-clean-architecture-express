@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '../apiSpecifications/httpTypes';
+import { HttpStatusCode } from '../../interface/types/httpTypes';
 import { EntityError, IEntityErrorOptions } from './EntityError';
 
 /**

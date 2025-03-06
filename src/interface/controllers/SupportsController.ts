@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
-import { HttpStatusCode } from '../../domain/apiSpecifications/httpTypes';
+import { HttpStatusCode } from '../types/httpTypes';
 import { FatalError } from '../../domain/errors/FatalError';
 import { CreateSalesInquiryUseCase } from '../../domain/usecases/support/CreateSalesInquiryUseCase';
 import { plainToInstance } from 'class-transformer';

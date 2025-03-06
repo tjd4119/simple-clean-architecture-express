@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpStatusCode } from '../../domain/apiSpecifications/httpTypes';
+import { HttpStatusCode } from '../types/httpTypes';
 import { FatalError } from '../../domain/errors/FatalError';
 import Container from 'typedi';
 import { ScanServerStatusUseCase } from '../../domain/usecases/status/ScanServerStatusUseCase';

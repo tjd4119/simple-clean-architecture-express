@@ -7,10 +7,10 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import { createDataSource } from './infrastructure/database/postgres';
 import { Container } from 'typedi';
 import { apiOperationHandlerRootPath } from './interface/controllers/api.operation.handler.root.path';
-import { apiSpecification } from './domain/apiSpecifications/apiSpecification';
+import { apiSpecification } from './interface/apiSpecifications/apiSpecification';
 import { getDatabasePassword } from './infrastructure/aws/secretManager';
 import { APIEntityError } from './domain/errors/APIEntityError';
-import { HttpStatusCode } from './domain/apiSpecifications/httpTypes';
+import { HttpStatusCode } from './interface/types/httpTypes';
 
 dotenvFlow.config();
 

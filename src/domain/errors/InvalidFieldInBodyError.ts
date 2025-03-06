@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '../apiSpecifications/httpTypes';
+import { HttpStatusCode } from '../../interface/types/httpTypes';
 import { APIEntityError } from './APIEntityError';
 
 /**
@@ -15,16 +15,11 @@ import { APIEntityError } from './APIEntityError';
  */
 export class InvalidFieldInBodyError extends APIEntityError {
   constructor(invalidFields: string[], details?: string[]) {
-    super(
-      HttpStatusCode.ClientErrorBadRequest,
-      undefined,
-      {
-        context: {
-          invalidFields: invalidFields,
-          details: details,
-        },
-      }
-    );
+    super(HttpStatusCode.ClientErrorBadRequest, undefined, {
+      context: {
+        invalidFields: invalidFields,
+        details: details,
+      },
+    });
   }
 }
-
