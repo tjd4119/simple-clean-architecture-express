@@ -93,4 +93,12 @@ export class SalesInquiry {
     comment: '도입문의 상태 변경 시점',
   })
   updatedAt!: Date;
+
+  public pending(): void {
+    this.status = InquiryStatus.PENDING;
+  }
+
+  public resolved(): void {
+    this.status = InquiryStatus.RESOLVED;
+  }
 }
