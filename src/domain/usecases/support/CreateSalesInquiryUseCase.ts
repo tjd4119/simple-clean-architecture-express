@@ -4,7 +4,7 @@ import { SalesInquiryRepository } from '../../../infrastructure/repositories/Sal
 import { ISalesInquiryRepository } from '../../repositories/ISalesInquiryRepository';
 import { isPhoneNumber } from '../../../utils/phoneNumber';
 import { isEmail } from '../../../utils/email';
-import { FatalError } from '../../errors/FatalError';
+import { InvalidFieldInBodyError } from '../../errors/InvalidFieldInBodyError';
 
 @Service()
 export class CreateSalesInquiryUseCase {
@@ -21,10 +21,16 @@ export class CreateSalesInquiryUseCase {
     data: string
   ): Promise<SalesInquiry> {
     if (!isEmail(contactEmail)) {
-      throw new FatalError('Invalid email');
+      throw new InvalidFieldInBodyError(
+        ['contactEmail'],
+        ['contactEmail should be a string.']
+      );
     }
     if (!isPhoneNumber(contactPhonenumber)) {
-      throw new FatalError('Invalid phoneNumber');
+      throw new InvalidFieldInBodyError(
+        ['contactPhonenumber'],
+        ['contactPhonenumber is not a valid phone number.']
+      );
     }
     const salesInquiry = new SalesInquiry();
     salesInquiry.organizationName = organizationName;
