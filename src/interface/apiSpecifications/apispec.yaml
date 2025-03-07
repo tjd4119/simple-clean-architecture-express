@@ -364,7 +364,7 @@ paths:
                         - data exceeds the length limit.
           headers: {}
       security: []
-      x-eov-operation-handler: SupportsController
+      x-eov-operation-handler: CreateSalesInquiryController
   /internal/v1/test-internal-only:
     get:
       summary: internalOnly

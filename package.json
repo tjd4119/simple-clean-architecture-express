@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.758.0",
+    "@jest-mock/express": "^3.0.0",
     "@testcontainers/postgresql": "^10.18.0",
     "@types/morgan": "^1.9.9",
     "class-transformer": "^0.5.1",

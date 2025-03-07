@@ -1,11 +1,20 @@
 import datasource from '../../../scripts/local.datasource';
 import assert from 'assert';
+import { Container } from 'typedi';
+
+export async function initializeDatabase() {
+  assert(process.env.NODE_ENV === 'test');
+
+  if (!datasource.isInitialized) {
+    await datasource.initialize();
+  }
+
+  Container.set('DataSource', datasource);
+}
 
 export async function cleanUpDatabase() {
   // if NODE_ENV is not test, do not clean up database
   assert(process.env.NODE_ENV === 'test');
-
-  if (!datasource.isInitialized) await datasource.initialize();
 
   const entities = datasource.entityMetadatas.map((entity) => {
     return {
