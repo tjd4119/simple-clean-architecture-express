@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { InquiryStatus } from '../../domain/entities/SalesInquiry';
 
-export class SalesInquiryDTO {
+export class CreateSalesInquiryResponseDTO {
   @Expose()
   salesInquiryId: string;
 

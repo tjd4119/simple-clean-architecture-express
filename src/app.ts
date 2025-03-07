@@ -33,7 +33,7 @@ app.use(morganMiddleware);
 app.use(
   OpenApiValidator.middleware({
     apiSpec: apiSpecification,
-    validateRequests: true,
+    validateRequests: false,
     validateResponses: false,
     operationHandlers: apiOperationHandlerRootPath,
     validateSecurity: false,
@@ -43,15 +43,18 @@ app.use(
 // setup error handler
 app.use((e: any, req: Request, res: Response, next: NextFunction) => {
   logger.error(e);
+
   if (e instanceof APIEntityError) {
     res.status(e.httpStatusCode).json({
+      message: e.message,
       context: e.context,
     });
-  }
-
-  res.status(e.status ?? HttpStatusCode.ServerErrorInternal).json({
-    message: e.type ?? 'The server encountered an unexpected condition',
-  });
+  } else {
+    res.status(e.status ?? HttpStatusCode.ServerErrorInternal).json({
+      message: e.type ?? 'The server encountered an unexpected condition'
+    })
+  
+  };
 });
 
 async function DatabaseConnect() {
