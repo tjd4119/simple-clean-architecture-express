@@ -8,7 +8,12 @@ export interface ParsedZodError {
 
 /**
  * ZodError parser
- * 
+ *
+ */
+/**
+ *
+ * @param error
+ * @returns
  */
 export function parseZodError(error: ZodError): ParsedZodError {
   const missingFields: string[] = [];
@@ -19,9 +24,7 @@ export function parseZodError(error: ZodError): ParsedZodError {
     const fieldPath = issue.path.join('.'); // ["organizationName"] -> "organizationName"
 
     // (1) requirement fields
-    if (
-      (issue.code === 'invalid_type' && issue.received === 'undefined')
-    ) {
+    if (issue.code === 'invalid_type' && issue.received === 'undefined') {
       missingFields.push(fieldPath);
     } else {
       // (2) invalid fields
