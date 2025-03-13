@@ -6,9 +6,13 @@ import { CountryCode, isValidPhoneNumber } from 'libphonenumber-js';
  * @param countryCode (string) - country code
  * @returns boolean
  */
+<<<<<<< HEAD
 /*
  * test
  */
+=======
+// test2
+>>>>>>> 47c5a90 (test:2)
 export function isPhoneNumber(
   str: string,
   countryCode: CountryCode = 'KR'
